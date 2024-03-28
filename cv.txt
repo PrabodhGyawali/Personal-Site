@@ -1,0 +1,12 @@
+TODO:
+1. Decide design style.
+    - Bootstrap? or Pure CSS and HTML
+    (Bootstrap)
+
+2. Make a quick first draft and re-iterate at god-speed
+    - circle profile on right 
+        (slick.jpg) -> 720 by 960 (0.75: 1)
+
+    - Name on left
+    - Main URLs (github, youtube channel, linkedin) on middle of the page
+    - text blobs in rectangles

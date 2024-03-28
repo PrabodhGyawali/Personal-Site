@@ -1,0 +1,36 @@
+/* icons */
+.icon-1 { font-size: 50px; }
+.icon-2 { font-size: 75px; }
+.icon-3 { font-size: 100px; }
+/* margins */
+.margin-1 { margin: 0 20px 0 20px; }
+/* Grid Styling */
+.top-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(auto);
+}
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile {
+    justify-self: right;
+    width: calc(3*72px);
+    height: calc(3*96px);
+    clip-path: circle(40%);
+}
+
+
+.cropped { 
+    width: 225px; height: 300px; overflow: hidden; 
+} 
+
+.child {
+    align-items: center;
+    text-align: center;
+}
+/* Contact */
+
