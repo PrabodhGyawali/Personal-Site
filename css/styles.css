@@ -1,28 +1,15 @@
-/* icons */
+/* ICONS */
 .icon-1 { font-size: 50px; }
 .icon-2 { font-size: 75px; }
 .icon-3 { font-size: 100px; }
-/* margins */
+
+/* Margins */
 .margin-1 { margin: 0 20px 0 20px; }
-/* Grid Styling */
-.top-container {
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: repeat(auto);
-}
-.hero {
+
+.container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
 }
-
-.profile {
-    justify-self: right;
-    width: calc(3*72px);
-    height: calc(3*96px);
-    clip-path: circle(40%);
-}
-
 
 .cropped { 
     width: 225px; height: 300px; overflow: hidden; 
