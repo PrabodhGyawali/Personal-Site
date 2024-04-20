@@ -1,1 +1,4 @@
-1. Change layout to a Flask format like many other website
+1. Add Navigation
+    - Contact -> email
+    - Portfolio projects
+    - Fun Facts
