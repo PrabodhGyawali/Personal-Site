@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRABODH_GYAWALI // TERMINAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Visual Effects -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- Main Terminal Interface -->
+    <div id="terminal-wrapper" class="crt-flicker max-w-4xl mx-auto p-4 sm:p-8" onclick="document.getElementById('cmd-input').focus()">
+        
+        <!-- Boot Sequence Display -->
+        <div id="boot-sequence" class="text-sm sm:text-base"></div>
+
+        <!-- Main Shell (Hidden initially) -->
+        <div id="shell" class="hidden h-full flex flex-col">
+            <div class="mb-4 text-xs text-green-700">
+                SYS_ARCH: x86_64 // KERNEL: 6.8.0-linux // USER: prabodh
+            </div>
+            
+            <div id="output-area" class="space-y-1">
+                <!-- Command history goes here -->
+            </div>
+
+            <div class="flex items-center mt-2 border-t border-green-900 pt-2">
+                <span id="prompt-label" class="mr-2 whitespace-nowrap font-bold">prabodh@leeds:~$</span>
+                <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulated PDF/File Viewer Modal -->
+    <div id="file-viewer" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-90 backdrop-blur-sm">
+        <div class="pdf-modal w-full max-w-3xl h-[80vh] flex flex-col relative p-4">
+            <div class="flex justify-between items-center border-b border-green-800 pb-2 mb-4">
+                <span id="viewer-filename" class="font-bold uppercase tracking-widest">FILENAME.PDF</span>
+                <span class="text-xs text-green-600">[READ ONLY]</span>
+            </div>
+            <div id="viewer-content" class="flex-grow overflow-y-auto whitespace-pre-wrap font-mono text-sm sm:text-base leading-relaxed text-green-300 flex items-center justify-center p-4">
+                <!-- File Content -->
+            </div>
+            <div class="mt-4 border-t border-green-800 pt-2 flex justify-between text-xs">
+                <span>LINE 1/END</span>
+                <button onclick="closeViewer()" class="hover:bg-green-900 px-2 py-1 uppercase">[ESC] Close Viewer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION & DATA ---
+        const fileSystem = {
+            type: 'dir',
+            children: {
+                'cv.pdf': {
+                    type: 'file',
+                    content: `
+============================================================================
+                               CURRICULUM VITAE
+============================================================================
+
+NAME:    Prabodh Gyawali
+ROLE:    CS Student / Embedded Systems Enthusiast
+LOC:     Leeds, UK
+
+----------------------------------------------------------------------------
+[ EDUCATION ]
+
+2023 - 2026  | University of Leeds
+             > B.Sc Computer Science with Artificial Intelligence
+             > Modules: Linear Algebra, Nanotechnology, Compilers
+
+2025 - PRES  | IG Tech Apprentice
+             > Firmware Curriculum: Arm Cortex-M, Embedded C, RTOS,
+               Wireless Comm (UART, SPI, I2C, BLE), Cryptography.
+
+2021 - 2023  | International School of Phnom Penh
+             > IB Diploma: 39/45 (Math AA HL, Physics HL, Econ HL)
+
+----------------------------------------------------------------------------
+[ EXPERIENCE ]
+
+Jul 2026+    | Gryphon Racing Leeds AI - Technical Director
+             > Overseeing SLAM, Path Planning, Control modules.
+             > Implemented Mission Supervisor node (FSM) in ROS2.
+
+Jan 2024+    | Gryphon Racing Leeds AI - Path Planning Member
+             > Migrated ROS1 to ROS2.
+             > Managed Docker/Linux environments for the team.
+
+Mar 2024     | Advanced Bank of Asia Limited - Back-end Data Intern
+             > Built React.js interface.
+             > Learned ASP.NET Core, Entity Framework, MongoDB.
+
+----------------------------------------------------------------------------
+[ SKILLS ]
+
+LANGUAGES:   C, Python, JS/TS, Assembly (x86/x64), C++, Rust (Learning)
+TECH:        React.js, Node.js, PostgreSQL, AWS, Flask, Git, ROS 2
+TOOLS:       Linux, GDB, Arduino, SolidWorks, Docker, ESP-IDF
+
+============================================================================
+[END OF FILE]
+            `
+                },
+                'projects.pdf': {
+                    type: 'file',
+                    content: `
+============================================================================
+                               PROJECT LOGS
+============================================================================
+
+1. PROJECT: GRYPHON_RACING_AI
+   ROLE:    Technical Director
+   STACK:   ROS2, Python, C++, Docker
+   STATUS:  Active
+   DESC:    Autonomous racing vehicle software. Implemented Mission 
+            Supervisor FSM. Managed SLAM and Path Planning modules.
+
+2. PROJECT: 3DOF_GRIPPER_ARM
+   ROLE:    Hardware/Firmware Dev
+   STACK:   Embedded C, ESP-IDF, SolidWorks
+   STATUS:  Completed
+   DESC:    Designed robot arm with 3D printed parts. Programmed 
+            motor control systems.
+
+3. PROJECT: EQUILIBRIA (GRANT PROJECT)
+   ROLE:    Full-stack Developer
+   STACK:   React, TypeScript, Flask, AWS
+   STATUS:  Shipped
+   DESC:    Funding rate arbitrage trading interface. Integrated 
+            TradingView & WebSockets. Awarded 10,000 ARB Token grant.
+
+4. PROJECT: INTERPORAL_CRYSTAL_HEDGING
+   ROLE:    Full-stack Developer
+   STACK:   Python, PostgreSQL
+   STATUS:  Completed
+   DESC:    Sports odds data API service. Implemented auth system 
+            and data pipelines.
+
+5. PROJECT: ROBOT_FIGHTING_LEAGUE
+   ROLE:    Lead Designer
+   STACK:   Arduino, C++
+   STATUS:  Active
+   DESC:    Combat robot design and motor control systems.
+
+============================================================================
+[END OF FILE]
+            `
+                },
+                'achievements.txt': {
+                    type: 'file',
+                    content: `
+[ CERTIFICATES & AWARDS ]
+
+> Pikuma: 3D Computer Graphics Programming (Software Renderer in C)
+> Udemy: Complete Web Development (Angela Yu)
+> Udemy: 100 Days of Python (Angela Yu)
+> LondonAppBrewery: Machine Learning & Data Science Bootcamp
+> Rust Intern at VexBet (NEAR protocol)
+> Phnom Penh Chess Champion (2021, 2022)
+> 100% in Shell implementation (OS Module) & HACK assembly encryption
+            `
+                },
+                'contact.txt': {
+                    type: 'file',
+                    content: `
+EMAIL:  prabodh.gyawali2005@gmail.com
+PHONE:  +44 7466 593771
+GITHUB: github.com/PrabodhGyawali
+LOC:    Leeds, UK
+
+Connection secure.
+            `
+                },
+                'headshots': {
+                    type: 'dir',
+                    children: {
+                        'normal.png': { type: 'image', src: 'assets/headshots/normal.png' },
+                        'suit.jpg': { type: 'image', src: 'assets/headshots/suit.jpg' },
+                        'linkedin.jpg': { type: 'image', src: 'assets/headshots/linkedin.jpg' },
+                        'chess.jpg': { type: 'image', src: 'assets/headshots/chess.jpg' }
+                    }
+                }
+            }
+        };
+
+        const bootMessages = [
+            "Initializing BIOS...",
+            "Checking memory... 32GB OK",
+            "Loading Kernel module v6.8...",
+            "Mounting root file system...",
+            "Scanning for peripherals...",
+            "Starting network services... [OK]",
+            "Authenticating user: prabodh...",
+            "Loading shell interface...",
+            "System Ready."
+        ];
+
+        // --- STATE ---
+        let commandHistory = [];
+        let historyIndex = -1;
+        let currentPath = []; // Array of directory names, empty means root
+        
+        const input = document.getElementById('cmd-input');
+        const output = document.getElementById('output-area');
+        const shell = document.getElementById('shell');
+        const bootScreen = document.getElementById('boot-sequence');
+        const viewer = document.getElementById('file-viewer');
+        const viewerContent = document.getElementById('viewer-content');
+        const viewerFilename = document.getElementById('viewer-filename');
+        const promptLabel = document.getElementById('prompt-label');
+
+        // --- CANVAS BACKGROUND (MATRIX RAIN) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const chars = "01"; // Binary rain
+        const fontSize = 14;
+        let columns = canvas.width / fontSize;
+        let drops = [];
+
+        function initRain() {
+            columns = canvas.width / fontSize;
+            drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+        }
+        initRain();
+
+        function drawRain() {
+            // Semi-transparent black to create trail effect
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0f0"; // Green text
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawRain, 33);
+
+
+        // --- TERMINAL LOGIC ---
+
+        // Boot Sequence
+        async function runBootSequence() {
+            for (let i = 0; i < bootMessages.length; i++) {
+                const line = document.createElement('div');
+                line.textContent = `> ${bootMessages[i]}`;
+                line.className = "mb-1 text-green-400";
+                bootScreen.appendChild(line);
+                
+                // Random delay between messages
+                await new Promise(r => setTimeout(r, Math.random() * 300 + 100));
+            }
+            
+            await new Promise(r => setTimeout(r, 500));
+            bootScreen.classList.add('hidden');
+            shell.classList.remove('hidden');
+            printOutput("Welcome to BurritOS v0.0.1", "text-white font-bold mb-4");
+            printOutput("Type 'help' to see available commands.", "mb-2");
+            input.focus();
+        }
+
+        // Helper to print to terminal
+        function printOutput(text, className = "") {
+            const div = document.createElement('div');
+            div.className = className;
+            // Handle newlines in text
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Helper to get current directory object
+        function getCurrentDir() {
+            let current = fileSystem;
+            for (const dir of currentPath) {
+                if (current.children && current.children[dir]) {
+                    current = current.children[dir];
+                } else {
+                    return null; // Should not happen if logic is correct
+                }
+            }
+            return current;
+        }
+
+        // Helper to update prompt
+        function updatePrompt() {
+            const pathStr = currentPath.length === 0 ? '~' : '~/' + currentPath.join('/');
+            promptLabel.textContent = `prabodh@leeds:${pathStr}$`;
+        }
+
+        // Command Parser
+        function handleCommand(cmd) {
+            const cleanCmd = cmd.trim();
+            if (!cleanCmd) return;
+            
+            const parts = cleanCmd.split(/\s+/);
+            const baseCmd = parts[0].toLowerCase();
+            const arg = parts[1];
+
+            const pathStr = currentPath.length === 0 ? '~' : '~/' + currentPath.join('/');
+            printOutput(`<span class="opacity-50">prabodh@leeds:${pathStr}$</span> ${cmd}`);
+
+            const currentDir = getCurrentDir();
+
+            switch (baseCmd) {
+                case 'help':
+                    printOutput(`
+<span class="text-white font-bold">AVAILABLE COMMANDS:</span>
+  <span class="text-green-300">ls</span>            List available files
+  <span class="text-green-300">cd [dir]</span>      Change directory
+  <span class="text-green-300">open [file]</span>   Open a specific file
+  <span class="text-green-300">whoami</span>        Current user info
+  <span class="text-green-300">contact</span>       Show contact details
+  <span class="text-green-300">clear</span>         Clear terminal output
+  <span class="text-green-300">reboot</span>        Restart the system
+                    `);
+                    break;
+                
+                case 'ls':
+                    if (currentDir && currentDir.children) {
+                        const files = Object.keys(currentDir.children).map(f => {
+                            const isDir = currentDir.children[f].type === 'dir';
+                            const color = isDir ? 'text-blue-400 font-bold' : 'text-green-300';
+                            const suffix = isDir ? '/' : '';
+                            return `<span class="mr-4 ${color}">${f}${suffix}</span>`;
+                        }).join('');
+                        printOutput(files);
+                    } else {
+                        printOutput("Error: Cannot list directory.", "text-red-400");
+                    }
+                    break;
+
+                case 'cd':
+                    if (!arg || arg === '~') {
+                        currentPath = [];
+                    } else if (arg === '..') {
+                        if (currentPath.length > 0) {
+                            currentPath.pop();
+                        }
+                    } else if (arg === '/') {
+                        currentPath = [];
+                    } else {
+                        // Handle relative paths (simple one level for now)
+                        // TODO: Support complex paths if needed
+                        if (currentDir.children && currentDir.children[arg] && currentDir.children[arg].type === 'dir') {
+                            currentPath.push(arg);
+                        } else {
+                            printOutput(`cd: ${arg}: No such directory`, "text-red-400");
+                        }
+                    }
+                    updatePrompt();
+                    break;
+
+                case 'open':
+                case 'cat':
+                case 'less':
+                    if (!arg) {
+                        printOutput("Error: Filename required. Usage: open [filename]", "text-red-400");
+                    } else if (currentDir.children && currentDir.children[arg]) {
+                        const file = currentDir.children[arg];
+                        if (file.type === 'file') {
+                            openViewer(arg, file.content, 'text');
+                        } else if (file.type === 'image') {
+                            openViewer(arg, file.src, 'image');
+                        } else if (file.type === 'dir') {
+                            printOutput(`Error: ${arg} is a directory. Use 'cd' instead.`, "text-red-400");
+                        }
+                    } else {
+                        printOutput(`Error: File '${arg}' not found.`, "text-red-400");
+                    }
+                    break;
+
+                case 'clear':
+                    output.innerHTML = '';
+                    break;
+
+                case 'whoami':
+                    printOutput("prabodh (admin privileges)");
+                    break;
+
+                case 'contact':
+                    // Find contact.txt in root if not in current dir, or just hardcode
+                    // For now, let's assume it's a command that prints specific info
+                    // Or we can look it up in root
+                    if (fileSystem.children['contact.txt']) {
+                        printOutput(fileSystem.children['contact.txt'].content);
+                    } else {
+                        printOutput("Contact info not found.");
+                    }
+                    break;
+
+                case 'reboot':
+                    location.reload();
+                    break;
+
+                default:
+                    printOutput(`Command not found: ${baseCmd}. Type 'help' for list.`, "text-red-400");
+            }
+        }
+
+        // --- INPUT HANDLING ---
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value;
+                if (cmd) {
+                    commandHistory.push(cmd);
+                    historyIndex = commandHistory.length;
+                    handleCommand(cmd);
+                    input.value = '';
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    input.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    input.value = '';
+                }
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                const currentInput = input.value;
+                const parts = currentInput.split(' ');
+                const baseCmd = parts[0];
+                const partialArg = parts[1] || '';
+
+                if (parts.length === 1) {
+                    // Command completion
+                    const commands = ['ls', 'cd', 'open', 'help', 'whoami', 'contact', 'clear', 'reboot'];
+                    const matches = commands.filter(c => c.startsWith(baseCmd));
+                    if (matches.length === 1) {
+                        input.value = matches[0] + ' ';
+                    }
+                } else if (parts.length === 2) {
+                    // File/Dir completion
+                    const currentDir = getCurrentDir();
+                    if (currentDir && currentDir.children) {
+                        const files = Object.keys(currentDir.children);
+                        const matches = files.filter(f => f.startsWith(partialArg));
+                        if (matches.length === 1) {
+                            input.value = `${baseCmd} ${matches[0]}`;
+                        } else if (matches.length > 1) {
+                            // Optional: Show possibilities?
+                            // For now, just complete common prefix if possible or do nothing
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- VIEWER MODAL ---
+        function openViewer(filename, content, type) {
+            viewerFilename.textContent = filename.toUpperCase();
+            
+            if (type === 'image') {
+                viewerContent.classList.add('flex', 'items-center', 'justify-center');
+                viewerContent.classList.remove('block');
+                viewerContent.innerHTML = `<img src="${content}" alt="${filename}" class="max-w-full max-h-full object-contain border-2 border-green-800">`;
+            } else {
+                viewerContent.classList.remove('flex', 'items-center', 'justify-center');
+                viewerContent.classList.add('block');
+                viewerContent.textContent = content;
+            }
+            
+            viewer.classList.remove('hidden');
+            input.blur();
+        }
+
+        function closeViewer() {
+            viewer.classList.add('hidden');
+            input.focus();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !viewer.classList.contains('hidden')) {
+                closeViewer();
+            }
+        });
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            runBootSequence();
+        };
+
+    </script>
+</body>
+</html>
+

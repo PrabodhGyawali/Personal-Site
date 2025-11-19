@@ -1,4 +1,1 @@
-1. move content of index.html to a new page called red-pill.html 
-2. make index.html allow user to choose between red and blue pill 
-3. Red pill redirects to red-pill.html 
-4. make asthetic portfolio website for blue pill, which is not terminal themed, and for normal users (who can't use a cli) 
+1. Cook more projects ASAP
