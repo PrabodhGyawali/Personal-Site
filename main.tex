@@ -1,0 +1,171 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot,
+    top=2cm,
+    bottom=2cm,
+    left=2cm,
+    right=2cm,
+    footskip=1.0cm,
+]{geometry}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 0, 0}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{amsmath}
+\usepackage[
+    pdftitle={Prabodh Gyawali's CV},
+    pdfauthor={Prabodh Gyawali},
+    pdfcreator={LaTeX},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}
+\usepackage[pscoord]{eso-pic}
+\usepackage{calc}
+\usepackage{bookmark}
+\usepackage{lastpage}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{iftex}
+
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% Settings:
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0.15cm}
+\pagenumbering{gobble}
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    -1pt
+}{
+    0.3cm
+}{
+    0.2cm
+}
+
+\begin{document}
+    \begin{center}
+        {\LARGE \textbf{Prabodh Gyawali}}
+        \\[5pt]
+        {\normalsize \faEnvelope \ \href{mailto:prabodh.gyawali2005@gmail.com}{prabodh.gyawali2005@gmail.com} \quad
+        \faPhone \ +44 7466 593771 \quad
+        \faGithub \ \href{https://github.com/PrabodhGyawali}{PrabodhGyawali}}
+        \\[5pt]
+        {\normalsize LS3 1LN, Leeds, UK}
+    \end{center}
+
+    \section{Education}
+    \textbf{University of Leeds} \hfill (2023 – 2026)
+    \\ B.Sc Computer Science with Artificial Intelligence
+    \\ \textit{Optional Modules: Linear Algebra, Nanotechnology, Compilers}
+    \\[5pt]
+    \textbf{IG Tech Apprentice} \hfill (2025 – Present)
+    \\ Learning Firmware Curriculum covering Computer Architecture (Arm Cortex-M), Assembly Language, Embedded C Programming, Data Structures and Algorithms, Microcontrollers, Serial and Wireless Communication (UART, SPI, I2C, BLE, NFC), Embedded System Design (RTOS, State Machines), Cryptography
+    \\[5pt]
+    \textbf{International School of Phnom Penh} \hfill (2021 – 2023)
+    \\ International Baccalaureate (IB) - Final Grade: 39/45
+    \\ Higher Level Subjects: Mathematics AA (6/7), Physics (7/7), Economics (6/7)
+
+    \section{Projects and Internships}
+    % TODO: Add Leeds Formula Students AI (Team Leader)
+    \textbf{Gryphon Racing Leeds AI - Technical Director} \hfill (July 2026 - Present)
+    \begin{itemize}
+        \item Used Github Projects to oversee SLAM, Path Planning, Control and Perception modules
+        \item Wrote container scripts to easily onboard new members into the team. \hfill \href{https://github.com/orgs/GryphonRacingAI/projects/1}{\faGithub}
+        \item Implementation of Mission Supervisor node (a Finite State Machine) which controls all other ROS2 nodes
+    \end{itemize}
+
+    \textbf{Gryphon Racing Leeds AI - Path Planning Member} \hfill (Jan 2024 – June 2025)
+    \begin{itemize}
+        \item Enhanced skills in Git, Docker and Linux as I helped get team members set up software on their laptop through Docker, WSL, Dual Booting Ubuntu 24.04
+        \item Learned architectural differences of ROS1 and ROS2 when migrating code between them
+        \item Migration from ROS1 to ROS2, learned architectural differences and lots of ROS concepts
+    \end{itemize}
+
+    \textbf{3 Degrees of Freedom Gripper Arm Robot} \hfill \href{https://github.com/}{\faGithub}
+    \begin{itemize}
+        \item Designed robot arm using SolidWorks CAD, incorporating 3D printed parts and aluminum sheet metal bending.
+        \item Programmed control systems with ESP-IDF in Embedded C for motor control and gripping functionality.
+    \end{itemize}
+
+    \textbf{Equilibria - Open Source Grant Project} -- \textit{Full-stack Developer} \hfill (Jul 2024 – Sep 2024)
+    \begin{itemize}
+        \item Developed funding rate arbitrage trading interface using React with TypeScript. 
+        \item Integrated TradingView widgets and WebSocket connections for real-time data. \hfill \href{https://github.com/PrabodhGyawali/GMX-Arb-UI}{\faGithub \space UI Code}
+        \item Implemented backend logic in Flask for a trading engine. \hfill \href{https://github.com/50shadesofgwei/funding-rate-arbitrage/tree/backend_flask_server}{\faGithub \space Engine Code}
+        \item Shipped the product using AWS for a 10,000 ARB Token grant.
+        \hfill \underline{\href{https://fundingratesniper.com}{(Website)}}
+    \end{itemize}
+
+    \textbf{Advanced Bank of Asia Limited} -- \textit{Back-end Data Intern} \hfill (Mar 2024 – Apr 2024)
+    \begin{itemize}
+        \item Built a React.js web interface for a restaurant menu with search functionality.
+        \item Learned ASP.NET Core and Entity Framework fundamentals.
+        \item Gained experience with MongoDB analyzing Twitter Community Notes dataset.
+    \end{itemize}
+
+    \textbf{Interporal Crystal Hedging} -- \textit{Full-stack Developer} \hfill (Dec 2023 – Mar 2024)
+    \begin{itemize}
+        \item Developed API service for sports odds data using Python and PostgreSQL 
+        \item Implemented user authentication system and API key management
+        \item Designed and maintained data pipeline for web scraping and data processing
+        \hfill \href{https://github.com/PrabodhGyawali/ICH-WEB}{\faGithub\ Code}
+    \end{itemize}
+
+    \section{Leadership Roles}
+    \textbf{Leeds University Robot Fighting League} \hfill (Jan 2024 – Present)
+    \begin{itemize}
+        \item Led project management and robot design.
+        \item Developed Arduino-based control systems for motor control.
+        \item Conducted testing and optimization of robot systems.
+        \hfill \underline{\href{https://a360.co/40qyP5N}{(CAD)}}
+    \end{itemize}
+
+    \textbf{University of Leeds Blockchain Society} -- \textit{Secretary} \hfill (Sept 2024 - Dec 2024)
+    \begin{itemize}
+        \item Developed society newsletter system using Node.js and AWS SES
+        \item Managed technical documentation and \href{https://github.com/University-of-Leeds-Blockchain-Society}{\faGithub\ Github Organization}
+        \item Delivered technical talk on implementing Bitcoin from scratch in Python
+    \end{itemize}
+
+    \section{Technical Skills}
+    \textbf{Programming Languages:} C, Python, JavaScript/TypeScript, Assembly (x86/x64), C++, Rust (Learning)
+    \\ \textbf{Technologies:} React.js, Node.js, PostgreSQL, AWS, Flask, Git
+    \\ \textbf{Tools:} Linux, GDB, Arduino, SolidWorks, Docker, ROS 2, ESP-IDF
+
+    \section{Achievements, Certificates, and Activities}
+    \begin{itemize}
+        \item \textbf{Pikuma - 3D Computer Graphics Programming}: Implemented a software renderer from scratch in C, covering rasterization, perspective projection, clipping, and texture mapping
+        \item \textbf{Angela Yu - Complete Web Development (Udemy)}: Built full-stack web applications using modern technologies including Node.js, React, and MongoDB
+        \item \textbf{Angel Yu - 100 Days of Python (Udemy)}: Developed various Python applications covering OOP, GUI development, web scraping, automation and data science
+        \item \textbf{LondonAppBrewery - Machine Learning and Data Science Bootcamp}: Implemented ML algorithms from scratch and worked with modern frameworks like TensorFlow and scikit-learn
+        \item Rust Intern at VexBet (Learning Rust and NEAR protocol development). \hfill \href{https://github.com/PrabodhGyawali/Rust-Intern-Work}{\faGithub\ Code}
+        \item Achieved 100\% in Shell implementation for OS module and HACK assembly encryption project.
+        \item Phnom Penh Chess Champion (2021, 2022).
+        \item Actively learning Open Source Security Training courses for \underline{\href{https://ost2.fyi/OST2_LP_Vulns_Exploits.pdf}{learning path}}
+        \item Built a Chrome Extension that helped me minimize social media noise \hfill \href{https://github.com/PrabodhGyawali/Distraction-Blocker}{\faGithub \space Code}.
+        \item Discord Server Mod for \underline{\href{https://x.com/i/communities/1783990533192651232}{C and Asm Developers}}, an active participant in learning OS development 
+    \end{itemize}
+
+\end{document}

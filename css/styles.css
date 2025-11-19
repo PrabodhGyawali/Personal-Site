@@ -1,45 +1,113 @@
-/* ICONS */
-.icon-1 { font-size: 50px; }
-.icon-2 { font-size: 75px; }
-.icon-3 { font-size: 100px; }
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&display=swap');
 
-/* Margins */
-.margin-1 { margin: 0 20px 0 20px; }
+:root {
+    --terminal-green: #0f0;
+    --terminal-glow: rgba(0, 255, 0, 0.6);
+    --bg-color: #050505;
+}
 
-.container {
-    text-align: center;
+body {
+    background-color: var(--bg-color);
+    color: var(--terminal-green);
+    font-family: 'Fira Code', monospace;
+    overflow: hidden; /* Prevent scroll on main body, handle inside terminal */
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* CRT Scanline Effect */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.2)
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 50;
+}
+
+/* CRT Flicker and Glow */
+.crt-flicker {
+    animation: flicker 0.15s infinite;
+    text-shadow: 0 0 5px var(--terminal-glow);
+}
+
+@keyframes flicker {
+    0% { opacity: 0.97; }
+    50% { opacity: 1; }
+    100% { opacity: 0.98; }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #001100;
+}
+::-webkit-scrollbar-thumb {
+    background: #004400;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #006600;
+}
+
+/* Cursor Blinking */
+.cursor-blink {
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Background Canvas */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+/* Layout */
+#terminal-wrapper {
+    position: relative;
+    z-index: 10;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 1rem;
 }
 
-/* Navigation */
-.nav{
-    justify-content: center;
-    display: flex;
-    gap: 2em;
-}
-.nav > a {
-    text-decoration: none;
-}
-.nav > a:hover {
-    text-decoration: none;
+#output-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
 }
 
-
-.cropped { 
-    width: 225px; height: 300px; overflow: hidden; 
-} 
-
-.profile {
-    width: 200px;
-    height: 200px;
-    border-radius: 100%;
+input[type="text"] {
+    background: transparent;
+    border: none;
+    color: var(--terminal-green);
+    font-family: 'Fira Code', monospace;
+    outline: none;
+    width: 100%;
+    text-transform: lowercase;
 }
 
-.child {
-    align-items: center;
-    text-align: center;
+.pdf-modal {
+    background-color: rgba(0, 20, 0, 0.95);
+    border: 2px solid var(--terminal-green);
+    box-shadow: 0 0 20px var(--terminal-glow);
 }
-/* Contact */
-
 
